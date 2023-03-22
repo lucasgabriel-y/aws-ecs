@@ -1,11 +1,11 @@
 provider "aws" {
   region = var.region
 }
-
+/*
 #Cria o recurso para usar uma chave de acesso  
 resource "aws_key_pair" "key-pair" {
-  key_name   = "apache-key"
-  public_key = file("/apache-key.pub")
+  key_name   = "${var.recurso}-key"
+  public_key = file("/ecs-key.pub")
 
 }
 
@@ -20,19 +20,19 @@ resource "aws_instance" "terraform" {
 
 
   tags = {
-    Name = "Apache terraform"
+    Name = "Teste terraform"
   }
 
-#Promove o acesso SSH a instancia
+  #Promove o acesso SSH a instancia
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
       host        = self.public_ip
       user        = var.user_ssh
-      private_key = file("/apache-key")
+      private_key = file("/ecs-key")
     }
 
-#Promove a instalação de recursos na instancia
+    #Promove a instalação de recursos na instancia
     inline = [
       "sudo yum update -y",
       "sudo yum install -y httpd",
@@ -57,7 +57,42 @@ output "IP" {
   value = aws_eip.eip.public_ip
 
 }
+*/
+resource "aws_ecs_cluster" "my_cluster" {
+  name = "my-cluster"
+}
 
+
+resource "aws_ecs_task_definition" "my_task_definition" {
+  family = "my-task-family"
+  container_definitions = jsonencode([{
+    name   = "my-container-name"
+    image  = "wordpress:latest"
+    cpu    = "256"
+    memory = "512"
+
+    portMappings = [
+      {
+        containerPort = 80
+        hostPort      = 80
+      }
+    ]
+  }])
+}
+
+
+resource "aws_ecs_service" "my_service" {
+  name            = "my-service"
+  cluster         = aws_ecs_cluster.my_cluster.id
+  task_definition = aws_ecs_task_definition.my_task_definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
+
+  network_configuration {
+    security_groups = [aws_security_group.public_security_group.id]
+    subnets         = [aws_subnet.private_subnet.id]
+  }
+}
 
 
 

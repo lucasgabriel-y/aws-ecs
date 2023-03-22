@@ -23,5 +23,10 @@ variable "user_ssh" {
   type        = string
   description = "Usuario SSH"
   default     = "ec2-user"
+}
 
+variable "recurso" {
+  type        = string
+  description = "Recurso usado"
+  default     = "ecs"
 }

@@ -3,7 +3,7 @@ resource "aws_vpc" "apache_vpc" {
   cidr_block = "10.0.0.0/16" # Bloco de endereços IP da VPC
 
   tags = {
-    Name = "apache_vpc"
+    Name = "${var.recurso}-_vpc"
   }
 }
 
