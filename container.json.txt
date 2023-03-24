@@ -1,0 +1,9 @@
+  name: jenkins
+  image: wordpress:latest
+  cpu: 2
+  memory: 254
+  essential: true
+  portMappings:
+    -
+      containerPort: 80
+      hostPort: 80

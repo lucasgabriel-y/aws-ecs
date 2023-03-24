@@ -4,6 +4,7 @@ resource "aws_vpc" "apache_vpc" {
 
   tags = {
     Name = "${var.recurso}-_vpc"
+    Name = "${var.recurso}-_vpc"
   }
 }
 
