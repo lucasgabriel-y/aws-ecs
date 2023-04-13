@@ -18,26 +18,26 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
-
-# Cria uma subnet privada
-resource "aws_subnet" "private_subnet" {
+# Cria uma segunda subnet publica
+resource "aws_subnet" "public_subnet2" {
   vpc_id     = aws_vpc.apache_vpc.id
   cidr_block = "10.0.2.0/24" # Bloco de endereços IP da subnet
-    availability_zone = "us-east-2b"
-
+  availability_zone = "us-east-2b"
   tags = {
-    Name = "private_subnet"
+    Name = "public_subnet2"
   }
 }
 
 
-# Cria uma segunda subnet privada 
-resource "aws_subnet" "private_subnet2" {
+
+# Cria uma subnet privada
+resource "aws_subnet" "private_subnet" {
   vpc_id     = aws_vpc.apache_vpc.id
   cidr_block = "10.0.3.0/24" # Bloco de endereços IP da subnet
-  availability_zone = "us-east-2c"
+    availability_zone = "us-east-2c"
+
   tags = {
-    Name = "private_subnet2"
+    Name = "private_subnet"
   }
 }
 
@@ -116,5 +116,12 @@ resource "aws_route_table" "public_route_table" {
 # Associa a subnet pública com a tabela de rotas pública
 resource "aws_route_table_association" "public_association" {
   subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+
+# Associa a subnet pública com a tabela de rotas pública
+resource "aws_route_table_association" "public_association2" {
+  subnet_id      = aws_subnet.public_subnet2.id
   route_table_id = aws_route_table.public_route_table.id
 }
