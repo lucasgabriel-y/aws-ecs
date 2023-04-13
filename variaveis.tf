@@ -33,3 +33,17 @@ variable "recurso" {
 
 }
 
+variable "cluster" {
+  type        = string
+  description = "Nome do Cluster"
+  default     = "Terraform"
+
+}
+
+variable "servico" {
+  type        = string
+  description = "Nome do Serviço"
+  default     = "Wordpress"
+
+}
+
