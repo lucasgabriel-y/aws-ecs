@@ -35,14 +35,14 @@ resource "aws_ecs_service" "my_service" {
   name            = var.servico
   cluster         = aws_ecs_cluster.cluster-ecs.id
   task_definition = aws_ecs_task_definition.my_task_definition.arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
   #https://earthly.dev/blog/deploy-dockcontainers-to-awsecs-using-terraform/
 
   network_configuration {
     security_groups  = [aws_security_group.public_security_group.id]
     subnets          = [aws_subnet.public_subnet.id]
-    #assign_public_ip = true
+    assign_public_ip = true
   }
 }
 
