@@ -1,40 +1,37 @@
 
-resource "aws_vpc" "apache_vpc" {
+resource "aws_vpc" "ecs_vpc" {
   cidr_block = "10.0.0.0/16" # Bloco de endereços IP da VPC
 
   tags = {
-    Name = "${var.recurso}-_vpc"
     Name = "${var.recurso}-_vpc"
   }
 }
 
 # Cria uma subnet pública
 resource "aws_subnet" "public_subnet" {
-  vpc_id     = aws_vpc.apache_vpc.id
+  vpc_id     = aws_vpc.ecs_vpc.id
   cidr_block = "10.0.1.0/24" # Bloco de endereços IP da subnet
   availability_zone = "us-east-2a"
   tags = {
-    Name = "public_subnet"
+    Name = "public_subnet A"
   }
 }
 
 # Cria uma segunda subnet publica
 resource "aws_subnet" "public_subnet2" {
-  vpc_id     = aws_vpc.apache_vpc.id
+  vpc_id     = aws_vpc.ecs_vpc.id
   cidr_block = "10.0.2.0/24" # Bloco de endereços IP da subnet
   availability_zone = "us-east-2b"
   tags = {
-    Name = "public_subnet2"
+    Name = "public_subnet B"
   }
 }
 
-
-
 # Cria uma subnet privada
 resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.apache_vpc.id
+  vpc_id     = aws_vpc.ecs_vpc.id
   cidr_block = "10.0.3.0/24" # Bloco de endereços IP da subnet
-    availability_zone = "us-east-2c"
+  availability_zone = "us-east-2c"
 
   tags = {
     Name = "private_subnet"
@@ -45,7 +42,7 @@ resource "aws_subnet" "private_subnet" {
 # Cria um grupo de segurança para a subnet pública
 resource "aws_security_group" "public_security_group" {
   name_prefix = "public_security_group"
-  vpc_id      = aws_vpc.apache_vpc.id
+  vpc_id      = aws_vpc.ecs_vpc.id
 
   ingress {
     description = "SSH"
@@ -92,7 +89,7 @@ resource "aws_security_group" "public_security_group" {
 
 # Cria um gateway de internet para a VPC
 resource "aws_internet_gateway" "gateway_internet" {
-  vpc_id = aws_vpc.apache_vpc.id
+  vpc_id = aws_vpc.ecs_vpc.id
 
   tags = {
     Name = "gateway_internet"
@@ -101,7 +98,7 @@ resource "aws_internet_gateway" "gateway_internet" {
 
 # Cria uma rota para permitir o tráfego da subnet pública para a Internet
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.apache_vpc.id
+  vpc_id = aws_vpc.ecs_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"

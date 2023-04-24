@@ -37,7 +37,6 @@ resource "aws_ecs_service" "my_service" {
   task_definition = aws_ecs_task_definition.my_task_definition.arn
   desired_count   = 2
   launch_type     = "FARGATE"
-  #https://earthly.dev/blog/deploy-dockcontainers-to-awsecs-using-terraform/
 
   network_configuration {
     security_groups  = [aws_security_group.public_security_group.id]
